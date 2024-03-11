@@ -6,6 +6,58 @@
 #include <fstream>
 using namespace std;
 
+string function(int n) {
+    string binary;
+    while (n > 0) {
+        binary = char('0' + (n % 2)) + binary;
+        n /= 2;
+    }
+    return binary;
+}
+
+string two_complement(int a) {
+    if (a >= 0) {
+        string c = "";
+        c+= "0";
+        c+= function(a);
+        return c;
+    } else {
+        int positive_value = abs(a);
+        string inverted_bits;
+        for (char bit : (function(positive_value))) {
+            inverted_bits += (bit == '0') ? '1' : '0';
+        }
+        int carry = 1;
+        for (int i = inverted_bits.size() - 1; i >= 0; --i) {
+            int sum = (inverted_bits[i] - '0') + carry;
+            inverted_bits[i] = char('0' + (sum % 2));
+            carry = sum / 2;
+        }
+        string e = "1";
+        e+= inverted_bits;
+        return e ;
+    }
+}
+string sign_extension (int number , int target )
+{
+    string c = "";
+    string d = two_complement(target);
+    if (target<0&& number>d.length())
+    {
+        for (int i =1 ; i<=number-d.length() ; i++){
+        c+= "1";
+        }
+        c+= two_complement(target);
+    }
+    else if (target>=0 && number > d.length())
+    {
+        for (int i =1 ; i<=number-d.length() ; i++){
+        c+= "0";
+        }
+        c+= d;
+    }
+    return c ;
+}
 vector<string> splitString(string s, char t) {
     vector<string> arr;
     stringstream ss(s);
@@ -218,10 +270,31 @@ string b_for_u(const vector<string>& arr){
   return u;
 }
 
-string b_for_j(const vector<string>& arr)
-{
-  return 0;
-}
+string b_for_j(const vector<string>& arr) {
+      string u = "";
+      u.append("1101111");
+      string rd = arr.at(1);
+      string imm = arr.at(2);
+      int immediate;
+      if (imm.substr(0, 2) == "0x") {
+          immediate = stoi(imm, nullptr, 16);
+      }
+      else {
+          immediate = stoi(imm);
+      }
+      string binary_imm;
+      if (immediate >= 0) {
+          binary_imm = bitset<20>(immediate).to_string();
+      }
+      else {
+          binary_imm = bitset<20>(immediate & 0xFFFFF).to_string();
+      }
+      u.append(binary_imm);
+
+      u.append(rd);
+
+      return u;
+  }
 
 int main(){
   string reg[32] = {"x0","x1","x2","x3","x4","x5","x6","x7","x8","x9","x10","x11","x12","x13","x14","x15","x16","x17","x18","x19","x20","x21","x22","x23","x24","x25","x26","x27","x28","x29","x30","x31"};
