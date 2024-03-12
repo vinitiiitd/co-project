@@ -81,7 +81,6 @@ vector<string> splitString_m(const string& input, const string& delimiters) {
     return tokens;
 }
 
-// ye gpt hai
 int b_to_d(int n){
     int c = 1 ; 
     int d = 1 ;
