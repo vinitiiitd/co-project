@@ -1,0 +1,13 @@
+lw s0,256(s0)
+sw s1,-768(s1)
+lw s2,1008(s2)
+sw s3,-432(s3)
+lw s4,720(s4)
+sw s5,-360(s5)
+lw t6,600(t6)
+sw t1,-912(t1)
+lw ra,256(ra)
+sw sp,-768(gp)
+lw tp,512(gp)
+sw gp,-256(tp)
+beq zero,zero,0
