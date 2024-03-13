@@ -1,0 +1,16 @@
+addi t0,zero,512
+addi t0,zero,512
+addi t0,zero,512
+addi t0,zero,512
+addi t0,zero,512
+addi t0,zero,512
+addi t0,zero,512
+addi t0,zero,512
+addi t0,zero,512
+addi t0,zero,512
+addi t0,zero,512
+addi t0,zero,512
+addi t0,zero,512
+addi t0,zero,512
+addi t0,zero,512
+beq zero,zero,0
