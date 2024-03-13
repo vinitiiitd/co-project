@@ -1,0 +1,7 @@
+startlabel: lui t0,2048
+    addi t0,t0,1024
+    lw t1,0(t0)
+    beq zero,zero,endlabel
+looplabel: addi t1,t1,-1
+    bne t1,zero,looplabel
+endlabel: beq zero,zero,0
