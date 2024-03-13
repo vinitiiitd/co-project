@@ -1,0 +1,8 @@
+xor t0,t1,t4
+sll a0,a1,a3
+add s4,t6,a7
+bgeu s5,s8,200
+auipc t2,-2000
+blt zero,s9,-100
+jalr t2,s3,0
+beq zero,zero,0
