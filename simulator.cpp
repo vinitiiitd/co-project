@@ -258,6 +258,7 @@ void i_type(string fun){
         value[reg[b_to_d(rd)]] = sext((PC + 4),32);
         string result4 =  value[reg[b_to_d(rd)]];
     }
+  pc+=4;
 
 }
 void s_type(string fun){
@@ -388,6 +389,7 @@ void u_type (string fun)
           value[reg[i]]=rd;
       }
   }
+  pc+=4;
 }
 void print_value(){
   cout<<sext(pc,32)<<" ";
