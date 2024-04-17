@@ -457,16 +457,10 @@ int main(){
       print_value();
     }
   }
-  for(int i=0;i<assm.size();i++){
-    if(isPresent(arr3,1,assm.at(i).substr(25,7)))  {
-      s_type(assm.at(i));
-      print_mem();
-    }
-    else if(assm.at(i).substr(25,7)=="0000011"){
-      i_type(assm.at(i));
-      print_mem();
-    }
+  for(int i = 0 ; i < 32 ; i++){
+    cout<<mem[i] << ":"<<data[mem[i]] <<endl;
   }
+
 
   return 0;
 }
