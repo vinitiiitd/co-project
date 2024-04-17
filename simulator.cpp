@@ -377,7 +377,7 @@ void u_type (string fun)
     {
         int rc = pc + bd((imm+"000000000000"));
         rd = (two_complement(rc));
-        cout<<rd;
+        rd = sext(rc,32);
     }
     else if (opcode=="0010111")
     {
