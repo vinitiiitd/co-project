@@ -414,6 +414,43 @@ void j_type (string fun){
   value[reg[b_to_d(stoi(rd))]] = sext(pc+4,32);
   pc = pc+imm1;
 }
+string bonus(string fun, string reg[]) {
+    string imm = (fun.substr(0,7) );
+    //cout<<imm<<endl;
+    int rs2 = b_to_d(stoi(fun.substr(7, 5)));
+    int rs1 = b_to_d(stoi(fun.substr(12, 5)));
+    //cout<<rs1<<endl;
+    //cout<<rs2<<endl;
+    string fun3 = fun.substr(17,3);
+    int rd = b_to_d(stoi(fun.substr(20,5)));
+    string opcode = (fun.substr(25,7));
+    string c = fun3 + opcode;
+
+
+    if(c == "0000000001"){ //mul
+        value[reg[b_to_d(rd)]] = db(bd(value[reg[b_to_d(rs1)]])*bd(value[reg[b_to_d(rs2)]]));
+        return  value[reg[b_to_d(rd)]];
+    }
+
+    else if(c == "0001000001"){ //rst
+        initializeGlobalVariables();
+    }
+
+    else if(c == "0001111111"){ // halt
+        exit(0);
+        return 0;
+    }
+
+    else if( c== "0010000001"){
+         reverse( (value[reg[b_to_d(rs1)]]).begin(),  (value[reg[b_to_d(rs1)]]).end());
+         cout<< 5 <<endl;
+         cout<< value[reg[b_to_d(rs1)]] <<endl;
+         value[reg[b_to_d(rd)]] = value[reg[b_to_d(rs1)]];
+         return value[reg[b_to_d(rd)]];
+    }
+
+    return "";
+}
 int main(){
   initialise_mem();
   for (int i = 0; i < 32; i++) {
@@ -462,7 +499,12 @@ int main(){
   for(int i = 0 ; i < 32 ; i++){
     cout<<mem[i] << ":"<<data[mem[i]] <<endl;
   }
-
+  //BONUS--BONUS
+//string x = bonus("00000000100000100000000000000001",reg); //mul
+//string x = bonus("00000000000000000000000001000001",reg); //rst
+//string x = bonus("00000000000000000000000001111111",reg); //halt
+// string x = bonus("00000000100000100001000000000001",reg); // rvrs
+ //cout << x<<endl;
 
   return 0;
 }
