@@ -278,55 +278,95 @@ void s_type(string fun){
 }
 void b_type (string fun)
 {
-    string imm = ((fun.substr(0,7) + fun.substr(20,25)));
+    string imm =  fun.substr(0,1) + fun.substr(24,1) ;
+    imm += fun.substr(1,5) ;
+    imm+=   fun.substr(20,4);
+    //cout<<imm<<endl;
     string rs2 = value[reg[b_to_d(stoi(fun.substr(7, 5)))]];
+    //int a = b_to_d(stoi(fun.substr(7, 5)));
+    //cout<<a<<endl;
     string rs1 = value[reg[b_to_d(stoi(fun.substr(12, 5)))]];
+    //cout<<rs1<<endl;
+    //cout<<rs2<<endl;
     string fun3 = fun.substr(17,3);
     string opcode = (fun.substr(25,7));
     string c = fun3 + opcode;
-    if (c == "1100011000")
+    //cout<<c<<endl;
+    if (c == "0001100011")
     {
-        if (sext(b_to_d(stoi(rs1)),32)== sext(b_to_d(stoi(rs2)),32))
+        if (bd(rs1) == bd(rs2))
         {
             pc += b_to_d(stoi(imm+"0"));
         }
+        else 
+        {
+            pc+=4 ;
+        }
     }
-    else if (c == "1100011001") // bne
+    else if (c == "0011100011") // bne
     {
-        if (sext(b_to_d(stoi(rs1)),32) != sext(b_to_d(stoi(rs2)),32))
+        if (bd(rs1)!=bd(rs2))
         {
             pc += b_to_d(stoi(imm+"0"));
         }
+        else 
+        {
+            pc+=4 ;
+        }
     }
-    else if (c=="1100011101") //bge
+    else if (c=="1011100011") //bge
     {
-        if (sext(b_to_d(stoi(rs1)),32) >= sext(b_to_d(stoi(rs2)),32))
+        if (bd(rs1)>=bd(rs2))
         {
             pc += b_to_d(stoi(imm+"0"));
         }
+        else 
+        {
+            pc=pc+4 ;
+        }
     }
-    else if (c=="1100011100") // blt
+    else if (c=="1001100011") // blt
     {
-         if (sext(b_to_d(stoi(rs1)),32) < sext(b_to_d(stoi(rs2)),32))
+         if (bd(rs1) < bd(rs2))
         {
             pc += b_to_d(stoi(imm+"0"));
         }
-    }
-    else if (c=="1100011110")
-    {
-        if (stoull(rs1, nullptr, 2) < stoull(rs2, nullptr, 2)) 
+        else 
         {
-            pc += (b_to_d(stoi(imm+"0")));
+            pc += 4 ;
         }
     }
-    else if (c=="1100011111")
+    else if (c=="1101100011")
     {
-        if (stoull(rs1, nullptr, 2) >= stoull(rs2, nullptr, 2)) 
+        if (b_to_d(stoi(rs1)) < b_to_d(stoi(rs1)))
+        {
+            pc += (b_to_d(stoi( imm + "0")));
+        }
+        else 
+        {
+            pc+=4 ;
+        }
+    }
+    else if (c=="1111100011")
+    {
+        if (b_to_d(stoi(rs1)) >= b_to_d(stoi(rs2))) 
         {
             pc += b_to_d(stoi(imm+"0"));
         }
+        else
+        {
+            pc+= 4 ;
+        }
     }
-    sext(pc,32);
+    else 
+    {
+        pc+=4 ;
+    }
+  // for(int i=0;i<=31;i++){
+  //     if(i==b_to_d(stoi(fun.substr(20,5)))){
+  //         value[reg[i]]=rd;
+  //     }
+ // }
 }
 void u_type (string fun)
 {
