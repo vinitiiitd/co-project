@@ -335,13 +335,14 @@ void u_type (string fun)
     string opcode = fun.substr(25,7);
     if (opcode=="0110111")
     {
-        rd = sext(d_to_b(d_to_b(pc) + b_to_d(stoi(imm+"000000000000"))),32);
+        int rc = pc + bd((imm+"000000000000"));
+        rd = (two_complement(rc));
+        cout<<rd;
     }
     else if (opcode=="0010111")
     {
         rd = imm+"000000000000";
     }
-  pc+=4;
   for(int i=0;i<=31;i++){
       if(i==b_to_d(stoi(fun.substr(20,5)))){
           value[reg[i]]=rd;
