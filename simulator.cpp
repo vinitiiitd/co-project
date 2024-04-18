@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <fstream>
 #include <cmath>
+#include <bitset>
 
 using namespace std;
 map<string, string> value;
@@ -138,6 +139,9 @@ int bd(string binary) {
     }
 
     return decimal;
+}
+string db(int decimalNum) {
+    return bitset<32>(decimalNum).to_string();
 }
 map<string,string> data; //key = mem, value = data
 string mem[32] ;
@@ -416,11 +420,9 @@ void j_type (string fun){
 }
 string bonus(string fun, string reg[]) {
     string imm = (fun.substr(0,7) );
-    //cout<<imm<<endl;
+
     int rs2 = b_to_d(stoi(fun.substr(7, 5)));
     int rs1 = b_to_d(stoi(fun.substr(12, 5)));
-    //cout<<rs1<<endl;
-    //cout<<rs2<<endl;
     string fun3 = fun.substr(17,3);
     int rd = b_to_d(stoi(fun.substr(20,5)));
     string opcode = (fun.substr(25,7));
@@ -433,7 +435,13 @@ string bonus(string fun, string reg[]) {
     }
 
     else if(c == "0001000001"){ //rst
-        initializeGlobalVariables();
+        for (int i = 0; i < 32; i++) {
+      if (i == 2) {
+          value[reg[i]] = "00000000000000000000000100000000";
+      } else {
+          value[reg[i]] = string(32, '0');
+      }
+  }
     }
 
     else if(c == "0001111111"){ // halt
@@ -508,3 +516,7 @@ int main(){
 
   return 0;
 }
+
+
+
+
