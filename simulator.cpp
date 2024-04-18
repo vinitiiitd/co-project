@@ -294,10 +294,9 @@ i_type (string fun)
   string fun3 = (fun.substr (17, 3));
   int rd = stoi (fun.substr (20, 5));
   string opcode = fun.substr (25, 7);
-
   string c = (fun3 + opcode);
 
-  int PC = bd (sext (bd (value[reg[(6)]]) + imm, 32));
+  
   //  cout<< imm <<endl;
 //   cout<< rs1 << endl;
 //   cout << fun3 <<endl;
@@ -312,7 +311,7 @@ i_type (string fun)
 	  value[reg[b_to_d (rd)]] =
 		data[mem[bd (value[reg[b_to_d (rs1)]]) + imm]];
 	  string result1 = value[reg[b_to_d (rd)]];
-
+  pc += 4;
 	}
 
   else if (c == "0000010011")
@@ -320,7 +319,7 @@ i_type (string fun)
 	  value[reg[b_to_d (rd)]] =
 		sext ((bd ((value[reg[b_to_d ((rs1))]])) + imm), 32);
 	  string result2 = value[reg[b_to_d (rd)]];
-
+pc += 4;
 	}
 
   else if (c == "0110010011")
@@ -330,15 +329,16 @@ i_type (string fun)
 		  value[reg[b_to_d (rd)]] = sext (1, 32);
 		}
 	  string result3 = to_string (imm);
-
+pc += 4;
 	}
 
   else if (c == "0001100111")
 	{							//jalr
-	  value[reg[b_to_d (rd)]] = sext ((PC + 4), 32);
+	  value[reg[b_to_d (rd)]] = sext ((pc + 4), 32);
 	  string result4 = value[reg[b_to_d (rd)]];
+	  int pc = bd (sext (bd (value[reg[(6)]]) + imm, 32));
 	}
-  pc += 4;
+
 
 }
 
@@ -349,9 +349,10 @@ s_type (string fun)
   int rs2 = b_to_d (stoi (fun.substr (7, 5)));
 
   int rs1 = b_to_d (stoi (fun.substr (12, 5)));
+  
   string fun3 = (fun.substr (17, 3));
   string opcode = fun.substr (25, 7);
-
+  
   string c = (fun3 + opcode);
   if (c == "0100100011" && (bd ((value[reg[b_to_d (rs1)]])) + imm) < 32
 	  && (bd ((value[reg[b_to_d (rs1)]])) + imm) > 0)
@@ -368,7 +369,6 @@ b_type (string fun)
   string imm = fun.substr (0, 1) + fun.substr (24, 1);
   imm += fun.substr (1, 5);
   imm += fun.substr (20, 4);
-  cout<<imm<<endl;
   string rs2 = value[reg[b_to_d (stoi (fun.substr (7, 5)))]];
   //int a = b_to_d(stoi(fun.substr(7, 5)));
   //cout<<a<<endl;
@@ -589,58 +589,74 @@ main ()
 	}
   vector < string > assm;	//   string a;
 string a;
-  cin>>a;
-  fstream myfile(a);
-  string itr;
-  while (getline (myfile, itr)) {
-    assm.push_back(itr);
-        
-  }
+    cin >> a;
+    fstream myfile(a);
+    string itr;
+    vector<string> assm;
+
+    while (getline(myfile, itr)) {
+        assm.push_back(itr);
+    }
   string arr1[1] = { "0110011"};
-  string arr2[3] = { "0010011", "1100111" };
+  string arr2[3] = { "0010011", "1100111" ,"0000011"};
   string arr3[1] = { "0100011" };
   string arr4[1] = { "1100011" };
   string arr5[2] = { "0110111", "0010111" };
   string arr6[1] = { "1101111" };
-  for (int i = 0; i < assm.size (); i++)
+  int i=0;
+  while(i<assm.size() and assm[i]!="00000000000000000000000001100011")
+
 	{
 	  if (isPresent (arr1, 1, assm[i].substr (25, 7)))
 		{
 		  r_type (assm[i]);
 		  print_value ();
+		  i++;
 		}
 	  else if (isPresent (arr2, 3, assm[i].substr (25, 7)))
 		{
 		    if(assm[i].substr(25,7)=="0000011"){
 		  i_type (assm[i]);
+		  i++;
 		        
+		    }
+		    else if(assm[i].substr(25,7)=="1100111"){
+		        i_type(assm[i]);
+		        i = pc/4;
 		    }
 		    else{
 		        i_type(assm[i]);
 		        print_value();
+		        i++;
 		    }
 		}
-	  else if (isPresent (arr4, 1, assm[i].substr (25, 7)))
+	  else if (isPresent (arr3, 1, assm[i].substr (25, 7)))
 		{
 		  b_type (assm[i]);
 		  print_value ();
+		  i = pc/4;
 		}
 	  else if (isPresent (arr4, 1, assm[i].substr (25, 7)))
 		{
 		  s_type (assm[i]);
+		  
+		  i++;
 		}
 	  else if (isPresent (arr5, 2, assm[i].substr (25, 7)))
 		{
 		  u_type (assm[i]);
 		  print_value ();
+		  i++;
 		}
 	  else if (isPresent (arr6, 1, assm[i].substr (25, 7)))
 		{
 		  j_type (assm[i]);
 		  print_value ();
+		  i = pc/4;
 		}
 	}
-	for(int i = 0 ; i < 32 ; i++){
+	cout<<"loop end"<<endl;
+    for(int i = 0 ; i < 32 ; i++){
     cout<<mem[i] << ":"<<data[mem[i]] <<endl;
   }
  
@@ -655,6 +671,12 @@ string a;
  //cout << x<<endl;
   return 0;
 }
+
+
+
+
+
+
 
 
 
